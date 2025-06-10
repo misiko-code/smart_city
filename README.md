@@ -1,4 +1,4 @@
-# INF II Demo(s) 
+# INF II project 
 
 # Database Setup 
 You can setup a mongo db instance as a standalone server on your own physical machine, or use a container for that.
