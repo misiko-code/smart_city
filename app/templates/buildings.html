@@ -1,0 +1,98 @@
+{%extends "base.html"%}
+
+{%block title%}Building Management{%endblock%}
+
+{%block content%}
+
+<div class="row">
+    <div class="col s12">
+        <h2 class="header">Buildings Overview</h2>
+        <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#add-building-modal"><i
+                class="material-icons">add</i></a>
+    </div>
+</div>
+
+<table class="highlight">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Project</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for building in buildings %}
+        <tr>
+            <td>{{ building.name }}</td>
+            <td>{{ building.location }}</td>
+            <td>{{ building.project }}</td>
+            <td>
+                <a class="btn small blue" href="/buildings/{{ building.id }}">View Details</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Modal Structure for Adding New Building -->
+<div id="add-building-modal" class="modal">
+    <div class="modal-content">
+        <h4>Add New Building</h4>
+        <form action="/buildings/" method="post" id="myForm">
+            <div class="input-field">
+                <input id="id" name="id" type="text" class="validate" required>
+                <label for="id">ID</label>
+            </div>
+            <div class="input-field">
+                <input id="name" name="name" type="text" class="validate" required>
+                <label for="name">Name</label>
+            </div>
+            <div class="input-field">
+                <input id="address" name="address" type="text" class="validate" required>
+                <label for="address">Address</label>
+            </div>
+            <div class="input-field">
+                <input id="floors" name="floors" type="text" class="validate">
+                <label for="floors">Floors</label>
+            </div>
+            
+            <button type="submit" class="btn waves-effect waves-light">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elemsModal = document.querySelectorAll('.modal');
+        var instancesModal = M.Modal.init(elemsModal);
+    });
+    
+    // Add json send functionality to the Add-form 
+    document.getElementById('myForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        var object = {};
+        formData.forEach(function (value, key) {
+            object[key] = value;
+        });
+        var json = JSON.stringify(object);
+        fetch('/buildings/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: json
+        }).then(response => {
+            if (response.ok) {
+                M.toast({html: 'Building added successfully!'});
+                location.reload();
+            } else {
+                M.toast({html: 'Error adding building!'});
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,3 @@
+http://localhost:63342/xeokit-bim-viewer-master/app/index.html?projectId=Schependomlaan
+
+直接显示xkt模型
