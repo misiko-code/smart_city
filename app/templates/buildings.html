@@ -1,84 +1,122 @@
-{%extends "base.html"%}
+<!-- File: app/templates/buildings.html -->
 
-{%block title%}Building Management{%endblock%}
+{% extends "base.html" %}
 
-{%block content%}
+{% block title %}Building Management{% endblock %}
 
-<div class="row">
-    <div class="col s12">
-        <h2 class="header">Buildings Overview</h2>
-        <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#add-building-modal"><i
-                class="material-icons">add</i></a>
+{% block content %}
+
+    <div class="container mt-5">
+        <div class="row mb-4">
+            <div class="col-8" style="margin-top: 50px;">
+                <h2 class="h2">Buildings Overview</h2>
+                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
+                    data-bs-target="#addBuildingModal">
+                    <i class="bi bi-plus"></i> Add Building
+                </button>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Building ID</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Floors</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for building in buildings %}
+                <tr>
+                    <td>{{ building.building_id }}</td>
+                    <td>{{ building.name }}</td>
+                    <td>{{ building.address }}</td>
+                    <td>{{ building.floors }}</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" id="viewDetailsBtn" href="/buildings/{{ building.building_id }}">View Details</a>
+                        <a class="btn btn-sm bi-trash btn-danger delete-btn" id="deleteBtn" href="/buildings/{{ building.building_id }}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Toast container for Bootstrap toasts -->
+        <div id="toast-container" style="position: fixed; top: 1rem; right: 1rem; z-index: 1080;"></div>
     </div>
-</div>
-
-<table class="highlight">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Project</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for building in buildings %}
-        <tr>
-            <td>{{ building.name }}</td>
-            <td>{{ building.location }}</td>
-            <td>{{ building.project }}</td>
-            <td>
-                <a class="btn small blue" href="/buildings/{{ building.id }}">View Details</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<!-- Modal Structure for Adding New Building -->
-<div id="add-building-modal" class="modal">
-    <div class="modal-content">
-        <h4>Add New Building</h4>
-        <form action="/buildings/" method="post" id="myForm">
-            <div class="input-field">
-                <input id="id" name="id" type="text" class="validate" required>
-                <label for="id">ID</label>
+    <!-- Modal Structure for Adding New Buildings -->
+    <div class="modal fade" id="addBuildingModal" tabindex="-1" aria-labelledby="addBuildingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBuildingModalLabel">Add New Building</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/buildings/" method="post" id="myForm">
+                        <div class="mb-3">
+                            <label for="building_id" class="form-label">Building ID</label>
+                            <input type="text" class="form-control" id="building_id" name="building_id" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="floors" class="form-label">Floors</label>
+                            <input type="number" class="form-control" id="floors" name="floors" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                    </form>
+                </div>
             </div>
-            <div class="input-field">
-                <input id="name" name="name" type="text" class="validate" required>
-                <label for="name">Name</label>
-            </div>
-            <div class="input-field">
-                <input id="address" name="address" type="text" class="validate" required>
-                <label for="address">Address</label>
-            </div>
-            <div class="input-field">
-                <input id="floors" name="floors" type="text" class="validate">
-                <label for="floors">Floors</label>
-            </div>
-            
-            <button type="submit" class="btn waves-effect waves-light">Submit</button>
-        </form>
+        </div>
     </div>
-</div>
 {% endblock %}
 
 {% block scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Initialize modals
         var elemsModal = document.querySelectorAll('.modal');
-        var instancesModal = M.Modal.init(elemsModal);
+        elemsModal.forEach(function (modal) {
+            new bootstrap.Modal(modal);  // Initialize each modal 
+        });
     });
-    
-    // Add json send functionality to the Add-form 
+
+    // Helper function to show toast and remove it after hidden
+    function showToast(message, type) {
+        var toastContainer = document.getElementById('toast-container');
+        var toastEl = document.createElement('div');
+        toastEl.classList.add('toast', 'text-white', type === 'success' ? 'bg-success' : 'bg-danger', 'border-0');
+        toastEl.setAttribute('role', 'alert');
+        toastEl.setAttribute('aria-live', 'assertive');
+        toastEl.setAttribute('aria-atomic', 'true');
+        toastEl.innerHTML = `<div class="d-flex toast-body">${message}</div>`;
+        toastContainer.appendChild(toastEl);
+        var toast = new bootstrap.Toast(toastEl, { delay: 2000 });
+        toast.show();
+        toastEl.addEventListener('hidden.bs.toast', function () {
+            toastEl.remove();
+        });
+    }
+
+    // Add JSON send functionality to the Add-form
     document.getElementById('myForm').addEventListener('submit', function (e) {
         e.preventDefault();
+        // Convert form data to JSON
         var formData = new FormData(this);
         var object = {};
         formData.forEach(function (value, key) {
             object[key] = value;
         });
+
         var json = JSON.stringify(object);
+
         fetch('/buildings/', {
             method: 'POST',
             headers: {
@@ -87,12 +125,50 @@
             body: json
         }).then(response => {
             if (response.ok) {
-                M.toast({html: 'Building added successfully!'});
-                location.reload();
+                showToast('Building added successfully!', 'success');
+                // Reload the page after a short delay to allow the toast to show
+                setTimeout(() => {
+                    location.reload();
+                }, 2000); // Delay to let the toast display before reload
             } else {
-                M.toast({html: 'Error adding building!'});
+                showToast('Error adding building!', 'error');
             }
         });
     });
+        // Add event listener to delete buttons
+    document.querySelectorAll('#deleteBtn').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();  // Prevent default link behavior
+            var buildingId = this.getAttribute('href').split('/').pop();  // Extract building ID from URL
+            confirmDelete(buildingId);  // Call the confirmDelete function with the building ID
+        });
+    });
+    // Function to confirm deletion of a building
+    function confirmDelete(buildingId) {
+        // Display a confirmation dialog
+        if (confirm('Are you sure you want to delete this building?')) {
+            // If confirmed, send a DELETE request to the backend
+            fetch(`/buildings/${buildingId}/`, {
+                method: 'DELETE',  // Use DELETE method to delete the resource
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        showToast('Building deleted successfully!', 'success', buildingId);
+                        // Reload the page after a short delay to reflect the changes
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showToast('Error deleting building!', 'error', buildingId);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    }
 </script>
 {% endblock %}

@@ -1,0 +1,226 @@
+/* ----------------------------------------------------------------------------------------------------------*/
+/* NavCubePlugin */
+/* ----------------------------------------------------------------------------------------------------------*/
+
+#myNavCubeCanvas {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    bottom: 50px;
+    right: 10px;
+}
+
+/* ----------------------------------------------------------------------------------------------------------*/
+/* TreeViewPlugin */
+/* ----------------------------------------------------------------------------------------------------------*/
+
+#treeViewContainer {
+    pointer-events: all;
+    height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    margin-top: 140px;
+    left: 10px;
+    background-image: linear-gradient(rgb(11, 11, 87), transparent ,brown);
+    color: white;
+    padding-left: 10px;
+    padding-top: 10px ;
+    font-size: 15px;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    width: 350px;
+}
+
+#treeViewContainer ul {
+    list-style: none;
+    padding-left: 1.75em;
+    pointer-events: none;
+}
+
+#treeViewContainer ul li {
+    position: relative;
+    width: 500px;
+    pointer-events: none;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    vertical-align: middle;
+}
+
+#treeViewContainer ul li a {
+    background-color: #eee;
+    border-radius: 50%;
+    color: #000;
+    display: inline-block;
+    height: 1.5em;
+    left: -1.5em;
+    position: absolute;
+    text-align: center;
+    text-decoration: none;
+    width: 1.5em;
+    pointer-events: all;
+}
+
+#treeViewContainer ul li a.plus {
+    background-color: #ded;
+    pointer-events: all;
+}
+
+#treeViewContainer ul li a.minus {
+    background-color: #eee;
+    pointer-events: all;
+}
+
+#treeViewContainer ul li a:active {
+    top: 1px;
+    pointer-events: all;
+}
+
+#treeViewContainer ul li span:hover {
+    color: white;
+    cursor: pointer;
+    background: brown;
+    padding-left: 2px;
+    pointer-events: all;
+}
+
+#treeViewContainer ul li span {
+    display: inline-block;
+    width: calc(100% - 50px);
+    padding-left: 2px;
+    pointer-events: all;
+    height: 23px;
+}
+
+#treeViewContainer .highlighted-node {
+    /* Appearance of node highlighted with TreeViewPlugin#showNode() */
+    border: black solid 1px;
+    background: yellow;
+    color: black;
+    padding-left: 1px;
+    padding-right: 5px;
+    pointer-events: all;
+}
+
+#myCanvas {
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    position: absolute;
+    background: lightblue;
+    background-image: linear-gradient(rgb(11, 11, 87), white);
+}
+
+#myCanvas-small {
+    width: 200px;
+    height: 200px;
+    left: 200px;
+    position: absolute;
+    background: lightblue;
+    background-image: linear-gradient(rgb(11, 11, 87), white);
+}
+
+#myCanvas-medium {
+    width: 80%;
+    height: 600px;
+    left: 200px;
+    top: 105px;
+    position: absolute;
+    background: lightblue;
+    background-image: linear-gradient(rgb(11, 11, 87), white);
+}
+
+.slideout-sidebar {
+    background: white;
+    position: fixed;
+    top: 105px;
+    right: -400px;
+    z-index: 100000000;
+    width: 400px;
+    height: 80%;
+    overflow-y: scroll;
+    transition: all 300ms ease-in-out;
+    border-left: 2px rgb(11, 11, 87);
+    margin-top: 0;
+    padding: 0px 10px 10px 20px;
+}
+
+.info-icon {
+    width: 100px;
+    height: auto;
+    padding-top: 20px;
+}
+
+#info-button {
+    display: none;
+}
+
+#info-button:hover {
+    cursor: pointer;
+}
+
+.info-button {
+    position: absolute;
+    right: 100px;
+    top: 120px;
+    z-index: 1;
+    transition: all 300ms ease-in-out;
+}
+
+.hide {
+    display: none;
+}
+
+.info-button:hover {
+    cursor: pointer;
+    color: brown;
+
+}
+
+#info-button:checked~.slideout-sidebar {
+    right: 0;
+}
+
+#info-button:checked+.info-button {
+    right: 400px;
+}
+
+#myDatGuiContainer {
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+.xeokit-camera-pivot-marker {
+    color: #ffffff;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 15px;
+    border: 2px solid #ebebeb;
+    background: #4444;
+    visibility: hidden;
+    box-shadow: 5px 5px 15px 1px #212529;
+    z-index: 10000;
+    pointer-events: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Additional Responsive Styles */
+@media (max-width: 768px) {
+
+    /* On smaller screens, make the image and text stack */
+    .col-lg-3,
+    .col-md-6 {
+        text-align: center;
+    }
+
+    /* Reduce the padding on smaller screens */
+    .container {
+        padding: 20px;
+    }
+}

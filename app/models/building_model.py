@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional, List
 
 class BuildingModel(BaseModel):
-    id: str
+    building_id: str
     name: str
     address: str
     floors: Optional[int] = 1

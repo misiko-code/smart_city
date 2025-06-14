@@ -1,11 +1,17 @@
 from pydantic import BaseModel
 from typing import Optional, List
+import datetime
 
 class SensorModel(BaseModel):
-    id: str
-    name: str
-    address: str
-    floors: Optional[int] = 1
-    inhabitants: Optional[List[str]] = []
-    has_elevator: Optional[bool] = False
-    has_parking: Optional[bool] = False
+    sensor_id: str
+    Description: str
+    location: str
+    unit: str
+    enabled: Optional[bool] = False
+    type: Optional[bool] = False
+    value: Optional[bool] = False
+
+class Sensor_dataModel(BaseModel):
+    temperature:float
+    humidity:float
+    timestamp: datetime.datetime

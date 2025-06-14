@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Temperature and Humidity Dashboard
+{% endblock %}
+
+{% block content %}
+  <div class="container" style="max-width: 900px; margin-top: 100px;">
+    <!-- Page Header -->
+    <div class="row mb-4">
+      <div class="col text-center">
+        <h2>Temperature and Humidity Dashboard</h2>
+      </div>
+    </div>
+
+    <!-- Card with Chart -->
+    <div class="card">
+      <div class="card-header" style="background-color: #f8f9fa;">
+        <h4>Temperature and Humidity Over Time</h4>
+      </div>
+      <div class="card-body">
+        <canvas id="sensorChart" style="height: 400px;"></canvas>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    // Fetch data from the FastAPI server
+    async function fetchSensorData() {
+      const response = await fetch('http://127.0.0.1:8000/api/sensor_data/')
+      const data = await response.json()
+      return data
+    }
+    
+    // Process the data and plot the chart
+    async function plotChart() {
+      const sensorData = await fetchSensorData()
+    
+      const timeLabels = []
+      const temperatureData = []
+      const humidityData = []
+    
+      sensorData.forEach((entry) => {
+        const timestamp = new Date(entry.timestamp)
+        timeLabels.push(timestamp.toLocaleString()) // Display timestamp in human-readable format
+        temperatureData.push(entry.temperature)
+        humidityData.push(entry.humidity)
+      })
+    
+      // Create the chart
+      const ctx = document.getElementById('sensorChart').getContext('2d')
+      const sensorChart = new Chart(ctx, {
+        type: 'line', // Line chart
+        data: {
+          labels: timeLabels, // X-axis labels (timestamps)
+          datasets: [
+            {
+              label: 'Temperature (°C)',
+              data: temperatureData,
+              borderColor: 'rgba(255, 99, 132, 1)',
+              fill: false,
+              tension: 0.1, // Makes the line smoother
+              pointRadius: 3 // Points on the line
+            },
+            {
+              label: 'Humidity (%)',
+              data: humidityData,
+              borderColor: 'rgba(54, 162, 235, 1)',
+              fill: false,
+              tension: 0.1,
+              pointRadius: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false, // Ensures the chart adjusts to container size
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Timestamp'
+              },
+              ticks: {
+                maxRotation: 45, // Rotate the x-axis labels for better readability
+                minRotation: 30
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Value'
+              },
+              beginAtZero: true
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top' // Position of the legend
+            },
+            tooltip: {
+              mode: 'index', // Shows tooltips on hover for multiple points
+              intersect: false
+            }
+          }
+        }
+      })
+    }
+    
+    // Call the function to plot the chart
+    plotChart()
+  </script>
+{% endblock %}
