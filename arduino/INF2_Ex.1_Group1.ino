@@ -10,10 +10,10 @@
 
 String sensorId = "123456";
 
-const char* ssid = "WGterian";
-const char* password = "b2Pcyheppwaf";
+const char* ssid = "TP-Link_8E70";
+const char* password = "SummerTU25*";
 
-String host = "192.168.0.36";
+String host = "192.168.1.255";
 String endpoint = "/"+ String(sensorId) + "/value";
 
 DHT dht(DHTPIN, DHTTYPE);
@@ -53,7 +53,7 @@ void loop() {
 }
 
 void send_to_server(float t,float h) {
-  String postData = "temperatur=" + (String)t +"&" + "humidity=" +(String)h;
+  String postData = "temperature=" + (String)t +"&" + "humidity=" +(String)h;
   
   if (WiFi.status() == WL_CONNECTED) 
   { //Check WiFi connection status

@@ -1,171 +1,174 @@
-{% extends 'base.html' %}
+<!-- File: app/templates/sensors.html -->
 
-{% block title %}
-  Sensor Management
-{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Sensor Management{% endblock %}
 
 {% block content %}
-  <div class="container mt-5">
-    <div class="row mb-4">
-      <div class="col-8" style="margin-top: 50px;">
-        <h2 class="h2">Sensors Overview</h2>
-        <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#addSensorModal"><i class="bi bi-plus"></i> Add Sensor</button>
-      </div>
-    </div>
 
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>Sensor ID</th>
-          <th>Location</th>
-          <th>Description</th>
-          <th>Unit</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for sensor in sensors %}
-          <tr>
-            <td>{{ sensor.sensor_id }}</td>
-            <td>{{ sensor.location }}</td>
-            <td>{{ sensor.Description }}</td>
-            <td>{{ sensor.unit }}</td>
-            <td>
-              <a class="btn btn-sm btn-primary" id="viewDetailsBtn" href="/sensors/{{ sensor.sensor_id }}">View Details</a>
-              <a class="btn btn-sm bi-trash btn-danger delete-btn" id="deleteBtn" href="/sensors/{{ sensor.sensor_id }}">Delete</a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <!-- Toast container for Bootstrap toasts -->
-    <div id="toast-container" style="position: fixed; top: 1rem; right: 1rem; z-index: 1080;"></div>
-  </div>
-  <!-- Modal Structure for Adding New Sensors -->
-  <div class="modal fade" id="addSensorModal" tabindex="-1" aria-labelledby="addSensorModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addSensorModalLabel">Add New Sensor</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="container mt-5">
+        <div class="row mb-4">
+            <div class="col-8" style="margin-top: 50px;">
+                <h2 class="h2">Sensors Overview</h2>
+                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
+                    data-bs-target="#addSensorModal">
+                    <i class="bi bi-plus"></i> Add Sensor
+                </button>
+            </div>
         </div>
-        <div class="modal-body">
-          <form action="/sensors/" method="post" id="myForm">
-            <div class="mb-3">
-              <label for="sensor_id" class="form-label">Sensor ID</label>
-              <input type="text" class="form-control" id="sensor_id" name="sensor_id" required />
-            </div>
-            <div class="mb-3">
-              <label for="location" class="form-label">Location</label>
-              <input type="text" class="form-control" id="location" name="location" required />
-            </div>
-            <div class="mb-3">
-              <label for="Description" class="form-label">Description</label>
-              <input type="text" class="form-control" id="Description" name="Description" required />
-            </div>
-            <div class="mb-3">
-              <label for="unit" class="form-label">Unit</label>
-              <input type="text" class="form-control" id="unit" name="unit" required />
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Submit</button>
-          </form>
-        </div>
-      </div>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Sensor ID</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Unit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sensor in sensors %}
+                <tr>
+                    <td>{{ sensor.sensor_id }}</td>
+                    <td>{{ sensor.description }}</td>
+                    <td>{{ sensor.location }}</td>
+                    <td>{{ sensor.unit }}</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" id="viewDetailsBtn" href="{{ sensor.sensor_id }}">View Details</a>
+                        <a class="btn btn-sm bi-trash btn-danger delete-btn" id="deleteBtn" href="{{ sensor.sensor_id }}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Toast container for Bootstrap toasts -->
+        <div id="toast-container" style="position: fixed; top: 1rem; right: 1rem; z-index: 1080;"></div>
     </div>
-  </div>
+    <!-- Modal Structure for Adding New Sensors -->
+    <div class="modal fade" id="addSensorModal" tabindex="-1" aria-labelledby="addSensorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSensorModalLabel">Add New Sensor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/sensors/" method="post" id="myForm">
+                        <div class="mb-3">
+                            <label for="sensor_id" class="form-label">Sensor ID</label>
+                            <input type="text" class="form-control" id="sensor_id" name="sensor_id" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="description" name="description" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="location" name="location" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="unit" class="form-label">Unit</label>
+                            <input type="text" class="form-control" id="unit" name="unit" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
-  <script>
+<script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Initialize modals
-      var elemsModal = document.querySelectorAll('.modal')
-      elemsModal.forEach(function (modal) {
-        new bootstrap.Modal(modal) // Initialize each modal
-      })
-    })
-    
-    // Function to show toast and remove it after hidden
+        // Initialize modals
+        var elemsModal = document.querySelectorAll('.modal');
+        elemsModal.forEach(function (modal) {
+            new bootstrap.Modal(modal);  // Initialize each modal 
+        });
+    });
+
+    // Helper function to show toast and remove it after hidden
     function showToast(message, type) {
-      var toastContainer = document.getElementById('toast-container')
-      var toastEl = document.createElement('div')
-      toastEl.classList.add('toast', 'text-white', type === 'success' ? 'bg-success' : 'bg-danger', 'border-0')
-      toastEl.setAttribute('role', 'alert')
-      toastEl.setAttribute('aria-live', 'assertive')
-      toastEl.setAttribute('aria-atomic', 'true')
-      toastEl.innerHTML = `<div class="d-flex toast-body">${message}</div>`
-      toastContainer.appendChild(toastEl)
-      var toast = new bootstrap.Toast(toastEl, { delay: 2000 })
-      toast.show()
-      toastEl.addEventListener('hidden.bs.toast', function () {
-        toastEl.remove()
-      })
+        var toastContainer = document.getElementById('toast-container');
+        var toastEl = document.createElement('div');
+        toastEl.classList.add('toast', 'text-white', type === 'success' ? 'bg-success' : 'bg-danger', 'border-0');
+        toastEl.setAttribute('role', 'alert');
+        toastEl.setAttribute('aria-live', 'assertive');
+        toastEl.setAttribute('aria-atomic', 'true');
+        toastEl.innerHTML = `<div class="d-flex toast-body">${message}</div>`;
+        toastContainer.appendChild(toastEl);
+        var toast = new bootstrap.Toast(toastEl, { delay: 2000 });
+        toast.show();
+        toastEl.addEventListener('hidden.bs.toast', function () {
+            toastEl.remove();
+        });
     }
-    
+
     // Add JSON send functionality to the Add-form
     document.getElementById('myForm').addEventListener('submit', function (e) {
-      e.preventDefault()
-      // Convert form data to JSON
-      var formData = new FormData(this)
-      var object = {}
-      formData.forEach(function (value, key) {
-        object[key] = value
-      })
-    
-      var json = JSON.stringify(object)
-    
-      fetch('/sensors/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: json
-      }).then((response) => {
-        if (response.ok) {
-          showToast('Sensor added successfully!', 'success')
-          // Reload the page after a short delay to allow the toast to show
-          setTimeout(() => {
-            location.reload()
-          }, 2000) // Delay to let the toast display before reload
-        } else {
-          showToast('Error adding sensor!', 'error')
-        }
-      })
-    })
-    // Add event listener to delete buttons
-    document.querySelectorAll('#deleteBtn').forEach((button) => {
-      button.addEventListener('click', function (e) {
-        e.preventDefault() // Prevent default link behavior
-        var sensorId = this.getAttribute('href').split('/').pop() // Extract sensor ID from URL
-        confirmDelete(sensorId) // Call the confirmDelete function with the sensor ID
-      })
-    })
+        e.preventDefault();
+        // Convert form data to JSON
+        var formData = new FormData(this);
+        var object = {};
+        formData.forEach(function (value, key) {
+            object[key] = value;
+        });
+
+        var json = JSON.stringify(object);
+
+        fetch('/sensors/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: json
+        }).then(response => {
+            if (response.ok) {
+                showToast('Sensor added successfully!', 'success');
+                // Reload the page after a short delay to allow the toast to show
+                setTimeout(() => {
+                    location.reload();
+                }, 2000); // Delay to let the toast display before reload
+            } else {
+                showToast('Error adding sensor!', 'error');
+            }
+        });
+    });
+        // Add event listener to delete buttons
+    document.querySelectorAll('#deleteBtn').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();  // Prevent default link behavior
+            var sensorId = this.getAttribute('href').split('/').pop();  // Extract sensor ID from URL
+            confirmDelete(sensorId);  // Call the confirmDelete function with the sensor ID
+        });
+    });
     // Function to confirm deletion of a sensor
     function confirmDelete(sensorId) {
-      // Display a confirmation dialog
-      if (confirm('Are you sure you want to delete this sensor?')) {
-        // If confirmed, send a DELETE request to the backend
-        fetch(`/sensors/${sensorId}/`, {
-          method: 'DELETE', // Use DELETE method to delete the resource
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-          .then((response) => {
-            if (response.ok) {
-              showToast('Sensor deleted successfully!', 'success')
-              // Reload the page after a short delay to reflect the changes
-              setTimeout(() => {
-                location.reload()
-              }, 1000)
-            } else {
-              showToast('Error deleting sensor!', 'error')
-            }
-          })
-          .catch((error) => {
-            console.error('Error:', error)
-          })
-      }
+        // Display a confirmation dialog
+        if (confirm('Are you sure you want to delete this sensor?')) {
+            // If confirmed, send a DELETE request to the backend
+            fetch(`/sensors/${sensorId}/`, {
+                method: 'DELETE',  // Use DELETE method to delete the resource
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        showToast('Sensor deleted successfully!', 'success', sensorId);
+                        // Reload the page after a short delay to reflect the changes
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showToast('Error deleting sensor!', 'error', sensorId);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
     }
-  </script>
+</script>
 {% endblock %}
