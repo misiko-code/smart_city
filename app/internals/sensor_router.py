@@ -16,33 +16,6 @@ async def sensor_management(request: Request):
     sensors = await get_sensors()
     return templates.TemplateResponse("sensors.html", {"request": request, "sensors": sensors})
 
-#--------------------- Sensor Data ---------------------
-@internal.get("/dashboard")
-async def dashboard(request: Request):
-    return templates.TemplateResponse("displaySensor.html", {"request": request})
-
-@internal.post("/sensor_data")
-async def receive_sensor_data(data: SensorData, request: Request):
-    """Receives sensor data from the frontend and stores it in the database.""" 
-    sensorData_collection = mongo_db_connector.init_sensor_datadb("temperature_humidity")
-    document = {
-        "temperature": data.temperature,
-        "humidity": data.humidity,
-        "timestamp": datetime.now(timezone.utc).isoformat()  # Use current UTC time
-    }
-    sensorData_collection.insert_one(document)
-    return {"message": "Data received successfully"}
-
-@internal.get("/sensor_data")
-async def display_sensor_data():
-    sensorData_collection = mongo_db_connector.init_sensor_datadb("temperature_humidity")
-    readings= list(sensorData_collection.find().sort("timestamp", -1).limit(100))
-    for reading in readings:
-        reading["_id"] = str(reading["_id"])  # Convert ObjectId to string
-        reading["timestamp"] = parser.parse(reading["timestamp"])  # Convert ISO format to datetime
-    return readings
-#--------------------- Sensor Data ---------------------
-
 @internal.get("/")
 async def read_sensors():
     """Fetches all sensors from the database."""
@@ -73,6 +46,32 @@ async def delete_sensor(sensor_id: str):
     sensor_collection.delete_one({"sensor_id": sensor_id})
     return {"message": "Sensor deleted successfully"}
 
+#--------------------- Sensor Data ---------------------
+@internal.get("/dashboard")
+async def dashboard(request: Request):
+    return templates.TemplateResponse("displaySensor.html", {"request": request})
+
+@internal.post("/sensor_data")
+async def receive_sensor_data(data: SensorData, request: Request):
+    """Receives sensor data from the frontend and stores it in the database.""" 
+    sensorData_collection = mongo_db_connector.init_sensor_datadb("temperature_humidity")
+    document = {
+        "temperature": data.temperature,
+        "humidity": data.humidity,
+        "timestamp": datetime.now(timezone.utc).isoformat()  # Use current UTC time
+    }
+    sensorData_collection.insert_one(document)
+    return {"message": "Data received successfully"}
+
+@internal.get("/sensor_data")
+async def display_sensor_data():
+    sensorData_collection = mongo_db_connector.init_sensor_datadb("temperature_humidity")
+    readings= list(sensorData_collection.find().sort("timestamp", -1).limit(100))
+    for reading in readings:
+        reading["_id"] = str(reading["_id"])  # Convert ObjectId to string
+        reading["timestamp"] = parser.parse(reading["timestamp"])  # Convert ISO format to datetime
+    return readings
+#--------------------- Sensor Data ---------------------
 
 async def get_sensors(sensor_id: str = None, location: str = None,  description: str = None, unit: str = None)->list:
     """Fetches sensors from the database depending on received params."""
@@ -92,4 +91,5 @@ async def get_sensors(sensor_id: str = None, location: str = None,  description:
         sensor.pop("_id")
         sensors_return.append(sensor)
     return sensors_return
+    
     

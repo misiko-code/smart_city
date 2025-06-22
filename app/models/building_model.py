@@ -9,3 +9,4 @@ class BuildingModel(BaseModel):
     inhabitants: Optional[List[str]] = []
     has_elevator: Optional[bool] = False
     has_parking: Optional[bool] = False
+

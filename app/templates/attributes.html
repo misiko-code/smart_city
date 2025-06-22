@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  View Buildings
+{% endblock %}
+
+{% block content %}
+
+<head>
+  <style>
+
+    .container-box {
+      margin-top: 40px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+    }
+    .btn-yellow {
+      background-color: #FFD700;
+      border-color: #FFD700;
+      color: black;
+      font-weight: bold;
+    }
+    .btn-yellow:hover {
+      background-color: #e6be00;
+      border-color: #e6be00;
+    }
+  </style>
+</head>
+<body>
+  </div>
+      <div class="row mb-4">
+      <div class="col text-center">
+        <h2>Manage Buildings</h2>
+        <h2>View Buildings</h2>
+      </div>
+    </div>
+
+  <div class="container-box text-center">
+    <h4 class="mb-4">Calculate Volume of Wall&Roof</h4>
+
+    <div class="mb-3">
+      <select id="material" class="form-select">
+        <option value="concrete">Concrete</option>
+        <option value="wood">Wood</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <input type="text" id="areaInput" class="form-control" placeholder="Area of Wall&Roof">
+    </div>
+
+    <button class="btn btn-yellow" onclick="calculateVolume()">Calculate</button>
+
+    <div id="result" class="mt-4"></div>
+  </div>
+      
+</body>
+
+  
+{% endblock %}
+{% block scripts%}
+<script>
+    function calculateVolume() {
+      const material = document.getElementById("material").value;
+      const area = parseFloat(document.getElementById("areaInput").value);
+      const resultDiv = document.getElementById("result");
+
+      if (isNaN(area)) {
+        resultDiv.innerHTML = "<div class='text-danger'>Please enter a valid area.</div>";
+        return;
+      }
+
+      const height = 3; // fixed height for demo
+      const volume = area * height;
+
+      resultDiv.innerHTML = `
+        <div class="alert alert-info">
+          <p><strong>Material:</strong> ${material}</p>
+          <p><strong>Calculated Volume:</strong> ${volume.toFixed(2)} m³</p>
+        </div>`;
+    }
+</script>
+{% endblock %}
+
