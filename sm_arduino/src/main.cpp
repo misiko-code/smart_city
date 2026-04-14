@@ -7,7 +7,7 @@
 // WiFi and servercredentials
 const char *ssid = "TP-Link_8E70";    // Replace with your WiFi SSID
 const char *password = "SummerTU25*"; // Replace with your WiFi password
-String host="192.168.1.101:8000"; // Server IP address, listening address of uvicorn 
+String host="192.168.1.100:8000"; // Server IP address, listening address of uvicorn 
 String api= "/sensors/sensor_data";//fastapi post request url
 
 // API endpoint to send data
